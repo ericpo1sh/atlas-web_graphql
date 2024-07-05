@@ -47,7 +47,7 @@ const TaskType = new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
-    project: {
+    project: {  
       type: ProjectType,
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
