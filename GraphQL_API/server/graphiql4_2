@@ -1,9 +1,9 @@
 {
-  task(id: "2") {
+  project(id: "1") {
     title
     weight
     description
-    project {
+    tasks {
       title
     }
   }
