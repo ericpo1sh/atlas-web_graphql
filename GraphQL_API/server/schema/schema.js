@@ -1,5 +1,7 @@
 const { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLSchema, GraphQLID, GraphQLList } = require('graphql');
 const lodash = require('lodash');
+const Task = require('./models/task');
+const Project = require('./models/project');
 
 const TaskData = [
   {id: '1', title: 'Create your first webpage', weight: 1, description: 'Create your first HTML file 0-index.html with: -Add the doctype on the first line (without any comment) -After the doctype, open and close a html tag Open your file in your browser (the page should be blank)', projectId: '1'},
@@ -76,6 +78,47 @@ const RootQuery = new GraphQLObjectType({
   },
 });
 
+const mutation = new GraphQLObjectType({
+  name: 'mutation',
+  fields: {
+    addProject: {
+      type: ProjectType,
+      args: {
+        title: { type: GraphQLString },
+        weight: { type: GraphQLInt },
+        description: { type: GraphQLString },
+      },
+      resolve(parent, args) {
+        let project = new Project({
+          title: args.title,
+          weight: args.weight,
+          description: args.description
+        });
+        return project.save()
+      }
+    },
+    addTask: {
+      type: TaskType,
+      args: {
+        title: { type: GraphQLString },
+        weight: { type: GraphQLInt },
+        description: { type: GraphQLString },
+        projectId: { type: new GraphQLNonNull(GraphQLID) }
+      },
+      resolve(parent, args) {
+        let task = new Task({
+          title: args.title,
+          weight: args.weight,
+          description: args.description,
+          projectId: args.projectId
+        });
+        return task.save()
+      }
+    },
+  }
+})
+
 module.exports = new GraphQLSchema({
   query: RootQuery,
+  mutation: mutation
 });
