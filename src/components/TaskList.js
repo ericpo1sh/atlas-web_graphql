@@ -2,7 +2,8 @@ import {
   useState,
   //useEffect
 } from "react";
-// components
+import { getTasksQuery } from "../queries/queries";
+import { graphql } from "react-apollo";
 import TaskDetails from './TaskDetails';
 
 function TaskList(props) {
@@ -10,17 +11,37 @@ function TaskList(props) {
     selected: null
   });
 
-  return ( <
-    div >
-    <
-    ul id = "task-list" > {
+  function displayTasks() {
+    console.log(props.data);
+    var data = props.data;
 
-    } <
-    /ul>  <
-    TaskDetails /
-    > < /
-    div >
+    if (data.loading) {
+      return ( <div> Loading tasks... </div>);
+      }
+      else {
+        return data.tasks.map(task => {
+            return ( <li key = {
+                task.id
+              }
+              onClick = {
+                (e) => {
+                  setState({
+                    selected: task.id
+                  });
+                }
+              } > {
+                task.title
+              } </li>);
+            })
+        }
+    }
+
+  return (
+    <div>
+      <ul id="task-list">{displayTasks()}</ul>
+      <TaskDetails taskId={state.selected}/>
+    </div>
   );
 }
 
-export default TaskList;
+export default graphql(getTasksQuery)(TaskList);
