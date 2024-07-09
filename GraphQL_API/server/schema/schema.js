@@ -23,7 +23,7 @@ const ProjectType = new GraphQLObjectType({
     tasks: {
       type: new GraphQLList(TaskType),
       resolve(parent, args) {
-        return lodash.filter(TaskData, { projectId: parent.id });
+        return Task.find({ projectId: parent.id });
       }
     }
   })
@@ -40,7 +40,7 @@ const TaskType = new GraphQLObjectType({
     project: {
       type: ProjectType,
       resolve(parent, args) {
-        return lodash.find(ProjectData, { id: parent.projectId });
+        return Project.findById(parent.projectId);
       }
     }
   })
@@ -53,29 +53,29 @@ const RootQuery = new GraphQLObjectType({
       type: ProjectType,
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
-        return lodash.find(ProjectData, { id: args.id });
+        return Project.findById(args.id);
       },
     },
     task: {
       type: TaskType,
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
-        return lodash.find(TaskData, { id: args.id });
+        return Task.findById(args.id);
       },
     },
     projects: {
       type: new GraphQLList(ProjectType),
       resolve(parent, args) {
-        return ProjectData;
+        return Project.find({});
       },
     },
     tasks: {
       type: new GraphQLList(TaskType),
       resolve(parent, args) {
-        return TaskData;
+        return Task.find({});
       },
     },
-  },
+  },  
 });
 
 const mutation = new GraphQLObjectType({
