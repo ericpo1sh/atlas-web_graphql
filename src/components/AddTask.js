@@ -16,7 +16,7 @@ function AddTask(props) {
   });
 
   function displayProjects() {
-    //  console.log(props);
+    console.log(props)
     const { getProjectsQuery } = props;
     if (getProjectsQuery.loading) {
       return ( <option> Loading projects... </option>);
